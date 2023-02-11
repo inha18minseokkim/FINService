@@ -1,0 +1,9 @@
+fastapi
+asyncio
+nest-asyncio
+Rocketry
+SQLAlchemy
+mysql
+pydantic
+uvicorn
+loguru
