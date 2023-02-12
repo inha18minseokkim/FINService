@@ -7,3 +7,4 @@ mysql
 pydantic
 uvicorn
 loguru
+pip install pymysql
