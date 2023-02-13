@@ -48,5 +48,9 @@ async def updateCorpInfo(body: RequestBody):
     res.corp_name = body.corp_name
     res.stock_code = body.stock_code
     res.modify_date = body.modify_date
-    session.commit()
+    try:
+        session.commit()
+    except:
+        session.rollback()
+        return {"code" : 1}
     return {"code" : 0}
