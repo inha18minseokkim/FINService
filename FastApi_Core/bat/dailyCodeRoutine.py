@@ -6,7 +6,7 @@ import asyncio
 import zipfile
 import urllib
 import xml.etree.ElementTree as elemTree
-import codecs
+
 url_code = "https://opendart.fss.or.kr/api/corpCode.xml"
 def update_code():
     res, _ = urllib.request.urlretrieve(url_code + "?crtfc_key=" +crtfc_key)
@@ -27,7 +27,13 @@ def update_code():
         print(i.find('corp_code').text, i.find('corp_name').text,i.find('stock_code').text,i.find('modify_date').text)
         
 if __name__ == "__main__":
-    update_code()
+    codedXmlFile = ""
+    with open("CORPCODE.xml") as readFile:
+        for line in codecs.iterdecode(readFile, 'utf8'):
+            codedXmlFile += line
+    tree = elemTree.parse(codedXmlFile)
+    print(tree.find('./list'))
+    #update_code()
     # f = open("ASDF.xml","rb")
     # tree = elemTree.parse("ASDF.xml")
     # li = tree.findall('list')

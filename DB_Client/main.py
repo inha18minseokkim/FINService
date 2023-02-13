@@ -16,6 +16,7 @@ async def test():
 @app.get("/tb_corp_code/selectCorpInfo/{corp_code}")
 async def selectCorpInfo(corp_code: str):
     res = session.query(corpInfo).filter(corpInfo.corp_code == corp_code).first()
+    if res == None: return {'code' : 1}
     return res
 
 class RequestBody(BaseModel):
@@ -33,9 +34,12 @@ async def insertCorpInfo(body: RequestBody):
     res.corp_name = body.corp_name
     res.stock_code = body.stock_code
     res.modify_date = body.modify_date
-    session.add(res)
-    session.commit()
-
+    try:
+        session.add(res)
+        session.commit()
+    except:
+        session.rollback()
+        return {"code": 1}
     return {"code" : 0}
 
 @app.post("/tb_corp_code/updateCorpInfo")

@@ -1,0 +1,7 @@
+FROM mysql:latest
+
+WORKDIR /app
+
+ENV MYSQL_ROOT_PASSWORD=admin
+
+ENV MYSQL_DATABASE=admin
