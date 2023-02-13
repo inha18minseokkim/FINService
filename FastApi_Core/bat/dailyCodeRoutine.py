@@ -6,7 +6,7 @@ import asyncio
 import zipfile
 import urllib
 import xml.etree.ElementTree as elemTree
-
+import codecs
 url_code = "https://opendart.fss.or.kr/api/corpCode.xml"
 def update_code():
     res, _ = urllib.request.urlretrieve(url_code + "?crtfc_key=" +crtfc_key)
