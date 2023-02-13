@@ -17,7 +17,18 @@ def update_code():
     with zip_file_object.open(first_file) as readFile:
         for line in codecs.iterdecode(readFile, 'utf8'):
             codedXmlFile += line
+    f = open("ASDF.xml", "w")
+    f.write(codedXmlFile)
+    return
     tree = elemTree.parse(codedXmlFile)
     print(tree.find('./list'))
 if __name__ == "__main__":
-    update_code()
+    #update_code()
+    f = open("ASDF.xml","rb")
+    #txt = ""
+    #print(f.read())
+    tree = elemTree.parse("ASDF.xml")
+    li = tree.findall('list')
+    print(li)
+    for i in li:
+        print(i.find('corp_code').text, i.find('corp_name').text,i.find('stock_code').text,i.find('modify_date').text)

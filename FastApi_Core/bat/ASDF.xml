@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+    <list>
+        <corp_code>01306196</corp_code>
+        <corp_name>다은컨설팅대부</corp_name>
+        <stock_code> </stock_code>
+        <modify_date>20220228</modify_date>
+    </list>
+    <list>
+        <corp_code>01210419</corp_code>
+        <corp_name>아소리빙</corp_name>
+        <stock_code> </stock_code>
+        <modify_date>20220228</modify_date>
+    </list>
+    <list>
+        <corp_code>01364729</corp_code>
+        <corp_name>비피에스글로벌</corp_name>
+        <stock_code> </stock_code>
+        <modify_date>20220228</modify_date>
+    </list>
+    <list>
+        <corp_code>01534692</corp_code>
+        <corp_name>에스앤로지스틱스</corp_name>
+        <stock_code> </stock_code>
+        <modify_date>20220228</modify_date>
+    </list>
+</result>
