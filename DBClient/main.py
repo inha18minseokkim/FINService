@@ -12,3 +12,7 @@ app.include_router(corpCodeRouter)
 async def test():
     return "DBClient Server is in good condition"
 
+@app.get("/raiseError")
+async def raiseError():
+    raise Exception
+    return "Exit"

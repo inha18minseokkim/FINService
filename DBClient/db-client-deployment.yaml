@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbclient
+  template:
+    metadata:
+      labels:
+        app: dbclient
+    spec:
+      containers:
+        - name: dbclient
+          image: muyaho/fin-service-db-client

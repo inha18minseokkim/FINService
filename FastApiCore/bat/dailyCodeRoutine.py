@@ -8,6 +8,9 @@ import urllib
 import xml.etree.ElementTree as elemTree
 import codecs
 url_code = "https://opendart.fss.or.kr/api/corpCode.xml"
+
+dbClientUrl = "http://localhost:8081/tb_corp_code/"
+
 def update_code():
     res, _ = urllib.request.urlretrieve(url_code + "?crtfc_key=" +crtfc_key)
     zip_file_object = zipfile.ZipFile(res,'r')
@@ -23,20 +26,20 @@ def update_code():
     tree = elemTree.parse("ASDF.xml")
     li = tree.findall('list')
     print(li)
+    resli = []
+    cnt = 0
     for i in li:
-        print(i.find('corp_code').text, i.find('corp_name').text,i.find('stock_code').text,i.find('modify_date').text)
+        cnt+=1
+        rb = {"corp_code" : i.find('corp_code').text,
+        "corp_name" : i.find('corp_name').text,
+        "stock_code" : i.find('stock_code').text,
+        "modify_date" : i.find('modify_date').text}
+        #print(i.find('corp_code').text, i.find('corp_name').text.text,i.find('stock_code').text,i.find('modify_date').text)
+        try:
+            resli.append(rb)
+        except:
+            print(cnt)
+        #requests.post(dbClientUrl + "insertCorpInfo",data=rb)
         
 if __name__ == "__main__":
-    codedXmlFile = ""
-    with open("CORPCODE.xml") as readFile:
-        for line in codecs.iterdecode(readFile, 'utf8'):
-            codedXmlFile += line
-    tree = elemTree.parse(codedXmlFile)
-    print(tree.find('./list'))
-    #update_code()
-    # f = open("ASDF.xml","rb")
-    # tree = elemTree.parse("ASDF.xml")
-    # li = tree.findall('list')
-    # print(li)
-    # for i in li:
-    #     print(i.find('corp_code').text, i.find('corp_name').text,i.find('stock_code').text,i.find('modify_date').text)
+    update_code()
