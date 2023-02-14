@@ -6,26 +6,28 @@ import asyncio
 import zipfile
 import urllib
 import xml.etree.ElementTree as elemTree
+from loguru import logger
 import codecs
 url_code = "https://opendart.fss.or.kr/api/corpCode.xml"
 
 dbClientUrl = "http://localhost:8081/tb_corp_code/"
 
 def update_code():
+    logger.debug("dailyCodeRoutine 시작")
     res, _ = urllib.request.urlretrieve(url_code + "?crtfc_key=" +crtfc_key)
     zip_file_object = zipfile.ZipFile(res,'r')
     first_file = zip_file_object.namelist()[0]
     file = zip_file_object.open(first_file)
+    logger.debug("dailyCodeRoutine dart에서 파일 파싱 성공")
     codedXmlFile = ""
     with zip_file_object.open(first_file) as readFile:
         for line in codecs.iterdecode(readFile, 'utf8'):
             codedXmlFile += line
-    f = open("ASDF.xml", "w")
-    f.write(codedXmlFile)
-    
-    tree = elemTree.parse("ASDF.xml")
+    tree = elemTree.fromstring(codedXmlFile)
+
     li = tree.findall('list')
-    print(li)
+
+    #print(li)
     resli = []
     cnt = 0
     for i in li:
@@ -34,12 +36,13 @@ def update_code():
         "corp_name" : i.find('corp_name').text,
         "stock_code" : i.find('stock_code').text,
         "modify_date" : i.find('modify_date').text}
-        #print(i.find('corp_code').text, i.find('corp_name').text.text,i.find('stock_code').text,i.find('modify_date').text)
         try:
             resli.append(rb)
         except:
+            logger.debug("파싱 실패 있음")
             print(cnt)
-        #requests.post(dbClientUrl + "insertCorpInfo",data=rb)
         
+    logger.debug(resli[0],resli[-1])
+    logger.debug("dailyCodeRoutine 성공")
 if __name__ == "__main__":
     update_code()
