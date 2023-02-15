@@ -1,10 +1,10 @@
 fastapi
 asyncio
 nest-asyncio
-Rocketry
+rocketry
 SQLAlchemy
 mysql
 pydantic
 uvicorn
 loguru
-pip install pymysql
+pymysql
