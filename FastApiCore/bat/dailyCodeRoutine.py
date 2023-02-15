@@ -1,6 +1,6 @@
 import sys,os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
-from declaration import crtfc_key
+from declaration import crtfc_key,dbUrl
 import requests
 import asyncio
 import zipfile
@@ -10,7 +10,7 @@ from loguru import logger
 import codecs
 url_code = "https://opendart.fss.or.kr/api/corpCode.xml"
 
-dbClientUrl = "http://172.22.229.244:32222/tb_corp_code/"
+dbClientUrl = dbUrl + "/tb_corp_code/"
 
 def update_code():
     logger.debug("dailyCodeRoutine 시작")

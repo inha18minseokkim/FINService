@@ -68,7 +68,7 @@ class RequestBody(BaseModel):
     ovis_ltdtl : str #당해 사채의 해외발행과 연계된 대차거래 내역
     ftc_stt_atn : str #공정거래위원회 신고대상 여부
 
-@cbRouter.post("/tb_cb_info/CurCBInfo/")
+@cbRouter.post("/tb_cb_info/setCurCBInfo/")
 async def setCBInfo(body: RequestBody):
     res = CBInfo()
     try:
