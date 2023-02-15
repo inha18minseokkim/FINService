@@ -1,4 +1,4 @@
-from fastApi import APIRouter
+from fastapi import APIRouter
 import sys,os
 sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from databaseCmn import engineConn
@@ -8,6 +8,10 @@ from loguru import logger
 cbRouter = APIRouter()
 conn = engineConn()
 session = conn.sessionmaker()
+
+@cbRouter.get("/tb_cb_info/")
+async def cbInfoMain():
+    return "CBInfo runs successfully"
 
 @cbRouter.get("/tb_cb_info/CurCBInfo/{curDate}")
 async def selectCBInfo(curDate: str): #일자 기준으로 해당하는 데이터가 있는지 조사

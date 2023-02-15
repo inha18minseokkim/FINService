@@ -8,6 +8,10 @@ from loguru import logger
 corpCodeRouter = APIRouter()
 conn = engineConn()
 session = conn.sessionmaker()
+@corpCodeRouter.get("/tb_corp_code/")
+async def codeInfoMain():
+    return "codeInfo runs successfully"
+
 @corpCodeRouter.get("/tb_corp_code/selectCorpInfo/{corp_code}")
 async def selectCorpInfo(corp_code: str):
     res = session.query(corpInfo).filter(corpInfo.corp_code == corp_code).first()
