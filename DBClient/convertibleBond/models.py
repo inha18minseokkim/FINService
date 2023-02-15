@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 class CBInfo(Base):
     __tablename__ = "TB_CB_INFO"
-    rcept_no =  Column(INT, nullable=False, autoincrement=True, primary_key=True) #접수번호
+    rcept_no =  Column(BIGINT, nullable=False, autoincrement=True, primary_key=True) #접수번호
     corp_cls =  Column(TEXT, nullable=False) #법인구분
     corp_code =  Column(TEXT, nullable=False) #고유번호
     corp_name =  Column(TEXT, nullable=False) #회사명
