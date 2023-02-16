@@ -5,6 +5,7 @@ from databaseCmn import engineConn
 from corpCode.models import corpInfo
 from pydantic import BaseModel
 from loguru import logger
+from sqlalchemy.sql import text
 corpCodeRouter = APIRouter()
 conn = engineConn()
 session = conn.sessionmaker()
@@ -17,6 +18,26 @@ async def selectCorpInfo(corp_code: str):
     res = session.query(corpInfo).filter(corpInfo.corp_code == corp_code).first()
     if res == None: return {'code' : 1}
     return res
+
+@corpCodeRouter.get("/tb_corp_code/selectCorpInfoByRange/{startIdx}/{endIdx}")
+async def selectCorpInfoByRange(startIdx: int, endIdx: int):
+    logger.debug(f"{startIdx} {endIdx}")
+    try:
+        exec = conn.engine.connect()
+        stmt = text(f"select idx,corp_code,corp_name,stock_code from TB_CORP_CODE where idx >= {startIdx} and idx <= {endIdx}")
+        res = exec.execute(stmt)
+    except:
+        return {'code' : 1}
+    li = []
+    for i in res:
+        dict = {}
+        dict['idx'] = i[0]
+        dict['corp_code'] = i[1]
+        dict['corp_name'] = i[2]
+        dict['stock_code'] = i[3]
+        li.append(dict)
+    return {'res': li, 'code' : 0}
+
 
 class RequestBody(BaseModel):
     corp_code: int
