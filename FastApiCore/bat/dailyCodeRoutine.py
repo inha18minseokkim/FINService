@@ -1,3 +1,4 @@
+import datetime
 import sys,os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from declaration import crtfc_key,dbUrl
@@ -28,9 +29,10 @@ def update_code():
 
     li = tree.findall('list')
 
-    #print(li)
-    resli = []
     cnt = 0
+    processCnt = 0
+    skipCnt = 0
+    errorCnt = 0
     for i in li:
         cnt+=1
         rb = {"corp_code" : i.find('corp_code').text,
@@ -39,16 +41,22 @@ def update_code():
         "modify_date" : i.find('modify_date').text}
         if cnt % 500 == 0:
             logger.debug(cnt)
-        try:
-            resli.append(rb)
-        except:
-            logger.debug("파싱 실패 있음")
-            print(cnt)
-        try:
-            requests.post(dbClientUrl + "insertCorpInfo",json=rb)
-        except Exception as e:
-            logger.debug("dailyCodeRoutine 리퀘스트 에러 발생")
-    logger.debug(resli[0],resli[-1])
-    logger.debug("dailyCodeRoutine 성공")
+
+        curDate = datetime.datetime.now().strftime("%Y%m%d")
+        if curDate == rb['modify_date']:
+            logger.debug(f"현재 날짜 : {curDate}, 최종 갱신 날짜 : {rb['modify_date']} 수정 필요")
+
+            try:
+                requests.post(dbClientUrl + "insertCorpInfo",json=rb)
+                processCnt += 1
+            except Exception as e:
+                logger.debug("dailyCodeRoutine 리퀘스트 에러 발생")
+                errorCnt += 1
+        else:
+            #logger.debug(f"현재 날짜 : {curDate}, 최종 갱신 날짜 : {rb['modify_date']} 그냥 스킵")
+            skipCnt+=1
+
+    #logger.debug(resli[0],resli[-1])
+    logger.debug(f"dailyCodeRoutine 성공 총 처리 : {cnt}, 갱신 : {processCnt}, 실패 : {errorCnt}")
 if __name__ == "__main__":
     update_code()
