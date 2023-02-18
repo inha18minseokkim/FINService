@@ -31,20 +31,17 @@ def getCBEvent():
 
         if res.json()['status'] != '000':
             if res.json()['status'] == '013':
+                logger.debug('dailyCBRoutine 아무것도 없음')
                 continue #정상 응답이 아니면 그냥 continue
             else:
                 logger.debug('dailyCBRoutine 뭔가 조회 실패')
                 continue
         resj = res.json()['list'][0]
         logger.debug(resj)
-        try:
-            dict = json.loads(resj)
-            print(dict)
-            dbres = requests.post(dbClientUrl + 'setCurCBInfo', json=dict).json()
-        except:
-            logger.debug('dailyCBRoutine '+resj['corp_code'] + ' db 반영 호출 실패')
-        else:
-            logger.debug("dailyCBRoutine: DB반영 결과 : "+ dbres['code'])
+        dbres = requests.post(dbClientUrl + 'setCurCBInfo', json=resj).json()
+        logger.debug(dbres)
+      #  logger.debug('dailyCBRoutine '+resj['corp_code'] + ' db 반영 호출 실패')
+        logger.debug(f"dailyCBRoutine: DB반영 결과 : {dbres['code']}")
 
     return
 

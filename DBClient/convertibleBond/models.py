@@ -33,7 +33,7 @@ class CBInfo(Base):
     cvisstk_tisstk_vs =  Column(TEXT, nullable=False) #전환에 관한 사항(주식총수 대비 비율)
     cvrqpd_bgd =  Column(TEXT, nullable=False) #전환청구기간(시작일)
     cvrqpd_edd =  Column(TEXT, nullable=False) #전환간(종료일)
-    act_mktprcfl_cvprc_lwtsprc = Column(TEXT, nullable=False) #시가하락에 따른 전환가액 조정(최저 조정가액)
+    act_mktprcfl_cvprc_lwtrsprc = Column(TEXT, nullable=False) #시가하락에 따른 전환가액 조정(최저 조정가액)
     act_mktprcfl_cvprc_lwtrsprc_bs = Column(TEXT, nullable=False) #	전환에 관한 사항(시가하락에 따른 전환가액 조정(최저 조정가액 근거))
     rmislmt_lt70p = Column(TEXT, nullable=False) #전환에 관한 사항(시가하락에 따른 전환가액 조정(발행당시 전환가액의 70% 미만으로 조정가능한 잔여 발행한도 (원)))
     abmg = Column(TEXT, nullable=False) #합병 관련 사항
