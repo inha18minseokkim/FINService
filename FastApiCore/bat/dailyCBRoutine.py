@@ -19,7 +19,7 @@ dbClientUrlCode = dbUrl + '/tb_corp_code/'
 dataCnt = 250
 dayCnt = 100000/dataCnt
 
-today = datetime.now() + timedelta(days=-31)
+today = datetime.now() #+ timedelta(days=-31)
 
 endDate = today.strftime('%Y%m%d')
 startDate = (today - timedelta(dayCnt)).strftime("%Y%m%d")
@@ -28,7 +28,7 @@ def getSeed():
     start_date = datetime(1999, 10, 20)
     today = datetime.now()
     delta = today - start_date
-    return int(delta.days)
+    return int(delta.days) + 2
 def getCBEvent():
     # db에서 상장주식 목록 가져온다.
     # 오늘 날짜 YYYYMMDD로 가져온다.
@@ -78,7 +78,7 @@ def getCBEvent():
         try:
             resj = res.json()['list'][0]
             logger.debug(resj)
-            dbres = requests.post(dbClientUrlCB + 'setCurCBInfo', json=resj).json()
+            dbres = requests.post(dbClientUrlCB + 'setCurCBInfo', json=resj,verify=False).json()
             logger.debug(dbres)
             eventCnt += 1
         except:
@@ -91,9 +91,4 @@ def getCBEvent():
     return
 
 if __name__ == "__main__":
-#    curDate = getSeed()
-#    print(curDate)
-#    print(curDate % 20)
-#    n = curDate % 20
-#    print(f'{5000*(n-1)+1}  {5000*n}')
     getCBEvent()
