@@ -1,0 +1,60 @@
+from fastapi import APIRouter, Request
+import sys,os
+sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
+from databaseCmn import engineConn
+from paidIncrease.models import paidIncreaseInfo
+from pydantic import BaseModel
+from loguru import logger
+from sqlalchemy.sql import text
+from sqlalchemy import Column, Table, TEXT, BIGINT, MetaData, insert, cast, String
+
+paidIncreaseRouter = APIRouter()
+conn = engineConn()
+session = conn.sessionmaker()
+metadata = MetaData()
+tbPaidIncreaseInfo =  Table('TB_PAID_INCREASE_INFO',metadata,
+   # Column('IDX',BIGINT,nullable=False,autoincrement=True,primary_key=True),
+    Column('rcept_no',BIGINT, nullable=False,primary_key=True,unique=True),
+    Column('corp_cls',TEXT, nullable=False),
+    Column('corp_code',TEXT, nullable=False),
+    Column('corp_name',TEXT, nullable=False),
+    Column('nstk_ostk_cnt',TEXT, nullable=False),
+    Column('nstk_estk_cnt',TEXT, nullable=False),
+    Column('fv_ps',TEXT, nullable=False) ,
+    Column('bfic_tisstk_ostk',TEXT, nullable=False),
+    Column('bfic_tisstk_estk',TEXT, nullable=False) ,
+    Column('fdpp_fclt',TEXT, nullable=False),
+    Column('fdpp_bsninh',TEXT, nullable=False) ,
+    Column('fdpp_op',TEXT, nullable=False),
+    Column('fdpp_dtrp',TEXT, nullable=False),
+    Column('fdpp_ocsa',TEXT, nullable=False),
+    Column('fdpp_etc',TEXT, nullable=False),
+    Column('ic_mthn',TEXT, nullable=False),
+    Column('ssl_at',TEXT, nullable=False),
+    Column('ssl_bgd',TEXT, nullable=False),
+    Column('ssl_edd',TEXT, nullable=False))
+tbPaidIncreaseInfo.create(conn.engine,checkfirst=True)
+
+@paidIncreaseRouter.get("/tb_paid_increase/")
+async def paidIncreaseMain():
+    return "paidIncrease runs successfully"
+
+@paidIncreaseRouter.get("/tb_paid_increase/selectCorpInfoByDay/{day}") #json 리스트로 줌
+async def selectCorpInfo(day: str):
+    rcept_no_str = cast(paidIncreaseInfo.rcept_no, String)
+    res = session.query(paidIncreaseInfo).filter(rcept_no_str.like(f'{day}%')).all()
+
+    if res == None: return {'code': 1}
+    return res
+
+@paidIncreaseRouter.post("/tb_paid_increase/setCorpInfo")
+async def setCorpInfo(body: Request):
+    json_str = await body.json()
+    logger.info(json_str)
+    json_str['rcept_no'] = int(json_str['rcept_no'])
+    stmt = insert(tbPaidIncreaseInfo).values(json_str)
+    session.execute(stmt)
+    session.commit()
+    logger.debug("삽입완료")
+
+    return {'code': 0}
