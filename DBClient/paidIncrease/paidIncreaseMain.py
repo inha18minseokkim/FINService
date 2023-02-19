@@ -42,9 +42,11 @@ async def paidIncreaseMain():
 @paidIncreaseRouter.get("/tb_paid_increase/selectCorpInfoByDay/{day}") #json 리스트로 줌
 async def selectCorpInfo(day: str):
     rcept_no_str = cast(paidIncreaseInfo.rcept_no, String)
-    res = session.query(paidIncreaseInfo).filter(rcept_no_str.like(f'{day}%')).all()
-
-    if res == None: return {'code': 1}
+    resli = session.query(paidIncreaseInfo).filter(rcept_no_str.like(f'{day}%')).all()
+    if resli == None or len(resli) == 0: return {'code': 1}
+    res = {}
+    res['list'] = resli
+    res['code'] = 0
     return res
 
 @paidIncreaseRouter.post("/tb_paid_increase/setCorpInfo")
