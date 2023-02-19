@@ -39,10 +39,11 @@ tbPaidIncreaseInfo.create(conn.engine,checkfirst=True)
 async def paidIncreaseMain():
     return "paidIncrease runs successfully"
 
-@paidIncreaseRouter.get("/tb_paid_increase/selectCorpInfoByDay/{day}") #json 리스트로 줌
-async def selectCorpInfo(day: str):
-    rcept_no_str = cast(paidIncreaseInfo.rcept_no, String)
-    resli = session.query(paidIncreaseInfo).filter(rcept_no_str.like(f'{day}%')).all()
+@paidIncreaseRouter.get("/tb_paid_increase/selectCorpInfoByDay/{startDate}/{endDate}") #json 리스트로 줌
+async def selectCorpInfo(startDate: int,endDate: int):
+    #rcept_no_str = cast(paidIncreaseInfo.rcept_no, String)
+    #resli = session.query(paidIncreaseInfo).filter(rcept_no_str.like(f'{day}%')).all()
+    resli = session.query(paidIncreaseInfo).filter(paidIncreaseInfo.rcept_no >= startDate, paidIncreaseInfo.rcept_no <= endDate).all()
     if resli == None or len(resli) == 0: return {'code': 1}
     res = {}
     res['list'] = resli
