@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 import sys,os
 sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from databaseCmn import engineConn
@@ -76,3 +76,16 @@ async def updateCorpInfo(body: RequestBody):
         session.rollback()
         return {"code" : 1}
     return {"code" : 0}
+
+@corpCodeRouter.post("/tb_corp_code/insertOrUpdateCorpInfoArr")
+async def insertOrUpdateCorpInfoArr(body: Request): # body안에는 "list" : [{}{}{}] 각각 code에 대한 json 리스트.
+    for ele in body["list"]:
+        tmpCorpInfo = corpInfo()
+        tmpCorpInfo.corp_code = ele['corp_code']
+        tmpCorpInfo.corp_name = ele['corp_name']
+        tmpCorpInfo.stock_code = ele['stock_code']
+        tmpCorpInfo.modify_date = ele['modify_date']
+        session.merge(tmpCorpInfo)
+    session.commit()
+    return {'code' : 0}
+
