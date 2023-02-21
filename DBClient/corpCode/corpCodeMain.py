@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Request
 import sys,os
+
+from sqlalchemy import Table, MetaData, BIGINT, Column, TEXT
+
 sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from databaseCmn import engineConn
 from corpCode.models import corpInfo
@@ -9,6 +12,16 @@ from sqlalchemy.sql import text
 corpCodeRouter = APIRouter()
 conn = engineConn()
 session = conn.sessionmaker()
+metadata = MetaData()
+tbCorpCode = Table('TB_CORP_CODE',metadata,
+    Column('IDX',BIGINT,nullable=False,autoincrement=True,primary_key=True),
+    Column('corp_code',BIGINT, nullable=False,primary_key=True,unique=True),
+    Column('corp_name',TEXT, nullable=False),
+    Column('stock_code',TEXT, nullable=False),
+    Column('modify_date',TEXT, nullable=False),
+    )
+tbCorpCode.create(conn.engine,checkfirst=True)
+
 @corpCodeRouter.get("/tb_corp_code/")
 async def codeInfoMain():
     return "codeInfo runs successfully"
@@ -79,7 +92,9 @@ async def updateCorpInfo(body: RequestBody):
 
 @corpCodeRouter.post("/tb_corp_code/insertOrUpdateCorpInfoArr")
 async def insertOrUpdateCorpInfoArr(body: Request): # body안에는 "list" : [{}{}{}] 각각 code에 대한 json 리스트.
-    for ele in body["list"]:
+    logger.debug(body)
+    dict = await body.json()
+    for ele in dict['list']:
         tmpCorpInfo = corpInfo()
         tmpCorpInfo.corp_code = ele['corp_code']
         tmpCorpInfo.corp_name = ele['corp_name']

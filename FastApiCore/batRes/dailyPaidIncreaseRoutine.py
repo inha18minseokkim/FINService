@@ -29,7 +29,7 @@ def getSeed():
     today = datetime.now()
     delta = today - start_date
     return int(delta.days)
-def getPaidIncreaseEvent():
+async def getPaidIncreaseEvent():
     # db에서 상장주식 목록 가져온다.
     # 오늘 날짜 YYYYMMDD로 가져온다.
     # 이벤트 있으면 DB에 적재.

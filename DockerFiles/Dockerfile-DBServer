@@ -10,7 +10,7 @@ RUN mkdir -p /var/lib/mysql
 RUN chown -R mysql:mysql /var/lib/mysql
 
 # Copy initialization SQL script to container
-COPY create_database.sql /docker-entrypoint-initdb.d/
+COPY ../DBServer/create_database.sql /docker-entrypoint-initdb.d/
 
 # Mount the directory on the host machine to the container's /var/lib/mysql directory
 VOLUME /var/lib/mysql
