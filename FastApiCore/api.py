@@ -4,7 +4,8 @@ from loguru import logger
 import sys
 import asyncio
 sys.path.append('/..') #부모 디렉터리 강제로 import 안하면 안됨 왜??????
-from batRes import dailyCBRoutine, dailyCodeRoutine, initCodeRoutine, dailyPaidIncreaseRoutine, openDartAnnRoutine
+from batRes import dailyCBRoutine, dailyCodeRoutine, initCodeRoutine, dailyPaidIncreaseRoutine
+from mainSvc import openDartAnnouncementSvc
 
 app = FastAPI()
 session = app_rocketry.session
@@ -44,6 +45,6 @@ async def execPaidIncreaseRoutine():
 @app.get("/getAnnounceInfo/{corpCode}/{bgnDe}/{endDe}/{pblntfTy}")
 async def getAnnounceInfo(corpCode: str,bgnDe: str,endDe: str, pblntfTy: str):
     logger.debug(f"{corpCode} {bgnDe} {endDe} {pblntfTy}")
-    res = openDartAnnRoutine.getAnnounceInfo(corpCode,bgnDe,endDe,pblntfTy)
+    res = openDartAnnouncementSvc.getAnnounceInfo(corpCode, bgnDe, endDe, pblntfTy)
     if res is None: return {'list' : []}
     return res
