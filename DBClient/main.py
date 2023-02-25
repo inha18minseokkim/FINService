@@ -12,6 +12,8 @@ app.include_router(cbRouter)
 app.include_router(paidIncreaseRouter)
 #meta_data = MetaData(bind=conn,reflect=True)
 #finServiceTable = meta_data.tables['TB_CORP_CODE']
+
+
 @app.get("/")
 async def test():
     return "DBClient Server is in good condition"

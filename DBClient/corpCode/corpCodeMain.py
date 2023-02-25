@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 import sys,os
 
-from sqlalchemy import Table, MetaData, BIGINT, Column, TEXT
+from sqlalchemy import Table, MetaData, BIGINT, Column, TEXT, UniqueConstraint
 
 sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from databaseCmn import engineConn
@@ -15,7 +15,7 @@ session = conn.sessionmaker()
 metadata = MetaData()
 tbCorpCode = Table('TB_CORP_CODE',metadata,
     Column('IDX',BIGINT,nullable=False,autoincrement=True,primary_key=True),
-    Column('corp_code',BIGINT, nullable=False,primary_key=True,unique=True),
+    Column('corp_code',TEXT(length=8), nullable=False),
     Column('corp_name',TEXT, nullable=False),
     Column('stock_code',TEXT, nullable=False),
     Column('modify_date',TEXT, nullable=False),
@@ -26,6 +26,31 @@ tbCorpCode.create(conn.engine,checkfirst=True)
 async def codeInfoMain():
     return "codeInfo runs successfully"
 
+@corpCodeRouter.get("/tb_corp_code/selectCorpInfoFixed")
+async def selectCorpInfoFixed():
+    if not hasattr(selectCorpInfoFixed, "counter"):
+        selectCorpInfoFixed.startIdx = 0
+    endIdx = selectCorpInfoFixed.startIdx + 510
+
+    logger.debug(f"{selectCorpInfoFixed.startIdx} {endIdx}")
+    if selectCorpInfoFixed.startIdx > 3545:
+        selectCorpInfoFixed.startIdx = 0
+    try:
+        exec = conn.engine.connect()
+        stmt = text(f"select idx,corp_code,corp_name,stock_code from TB_CORP_CODE where idx >= {selectCorpInfoFixed.startIdx} and idx <= {endIdx}")
+        res = exec.execute(stmt)
+        selectCorpInfoFixed.startIdx += 510
+    except:
+        return {'code' : 1}
+    li = []
+    for i in res:
+        dict = {}
+        dict['idx'] = i[0]
+        dict['corp_code'] = i[1]
+        dict['corp_name'] = i[2]
+        dict['stock_code'] = i[3]
+        li.append(dict)
+    return {'list': li, 'code' : 0}
 @corpCodeRouter.get("/tb_corp_code/selectCorpInfo/{corp_code}")
 async def selectCorpInfo(corp_code: str):
     res = session.query(corpInfo).filter(corpInfo.corp_code == corp_code).first()
