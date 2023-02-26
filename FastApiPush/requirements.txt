@@ -1,0 +1,5 @@
+discord
+loguru
+uvicorn
+fastapi
+nest_asyncio
