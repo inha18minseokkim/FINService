@@ -1,0 +1,13 @@
+FROM python:3.9
+
+WORKDIR /code
+
+COPY ../FastApiPush/requirements.txt ./code/requirements.txt
+
+RUN pip install -r ./code/requirements.txt
+
+COPY ../FastApiPush /code
+
+EXPOSE 8084
+
+CMD ["uvicorn","main:app","--host=0.0.0.0","--port=8084"]
