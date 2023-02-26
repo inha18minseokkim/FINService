@@ -1,9 +1,5 @@
-import requests
 from rocketry import Rocketry
 from rocketry.conds import every, after_success
-from loguru import logger
-from declaration import dbUrl
-from batRes import openDartAnnRoutine
 
 app = Rocketry(config={"task_execution": "async"})
 
