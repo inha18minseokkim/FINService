@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-push
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: push
+  template:
+    metadata:
+      labels:
+        app: push
+    spec:
+      containers:
+        - name: push
+          image: muyaho/fin-service-fastapi-push
