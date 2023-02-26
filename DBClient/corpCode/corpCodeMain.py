@@ -11,7 +11,7 @@ from loguru import logger
 from sqlalchemy.sql import text
 corpCodeRouter = APIRouter()
 conn = engineConn()
-session = conn.sessionmaker()
+#session = conn.sessionmaker()
 metadata = MetaData()
 tbCorpCode = Table('TB_CORP_CODE',metadata,
     Column('IDX',BIGINT,nullable=False,autoincrement=True,primary_key=True),
@@ -53,8 +53,10 @@ async def selectCorpInfoFixed():
     return {'list': li, 'code' : 0}
 @corpCodeRouter.get("/tb_corp_code/selectCorpInfo/{corp_code}")
 async def selectCorpInfo(corp_code: str):
+    session = conn.sessionmaker()
     res = session.query(corpInfo).filter(corpInfo.corp_code == corp_code).first()
     if res == None: return {'code' : 1}
+    session.close()
     return res
 
 @corpCodeRouter.get("/tb_corp_code/selectCorpInfoByRange/{startIdx}/{endIdx}")
@@ -85,7 +87,7 @@ class RequestBody(BaseModel):
 
 @corpCodeRouter.post("/tb_corp_code/insertCorpInfo")
 async def insertCorpInfo(body: RequestBody):
-
+    session = conn.sessionmaker()
     res = corpInfo()
     print(body.corp_code)
     res.corp_code = body.corp_code
@@ -97,6 +99,7 @@ async def insertCorpInfo(body: RequestBody):
         session.commit()
     except:
         session.rollback()
+        session.close()
         return {"code": 1}
     return {"code" : 0}
 

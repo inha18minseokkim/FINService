@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Table, TEXT, INT,
 
 cbRouter = APIRouter()
 conn = engineConn()
-session = conn.sessionmaker()
+#session = conn.sessionmaker()
 metadata = MetaData()
 
 tbCbInfo =  Table('TB_CB_INFO',metadata,
@@ -73,9 +73,10 @@ async def cbInfoMain():
 
 @cbRouter.get("/tb_cb_info/CurCBInfo/{curDate}")
 async def selectCBInfo(curDate: str): #일자 기준으로 해당하는 데이터가 있는지 조사
+    session = conn.sessionmaker()
     res = session.query(CBInfo).filter(CBInfo.bddd == curDate).all()
     if res == None: return {'code' : 1}
-
+    session.close()
     return res
 
 class RequestBody(BaseModel):
@@ -131,13 +132,17 @@ class RequestBody(BaseModel):
 @cbRouter.post("/tb_cb_info/setCurCBInfo/")
 async def setCBInfo(body: RequestBody):
     json_str = json.loads(json.dumps(body, cls = MyEncoder))
-
+    session = conn.sessionmaker()
     logger.info(json_str)
-
-    stmt = insert(tbCbInfo).values(json_str)
-    session.execute(stmt)
-    session.commit()
-
+    try:
+        stmt = insert(tbCbInfo).values(json_str)
+        session.execute(stmt)
+        session.commit()
+    except Exception as e:
+        logger.debug("삽입 중 오류 {e}", e=e, exc_info=True)
+        session.rollback()
+        session.close()
+        return {'code' : 1}
     logger.debug("삽입완료")
 
     return {'code' : 0}
