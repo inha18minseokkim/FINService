@@ -4,9 +4,10 @@ from declaration import crtfc_key,dbUrl
 import requests
 import json
 from datetime import datetime, timedelta
+from FastApiCore.Svc.eventPushSvcIntf import eventHandle
 from loguru import logger
-import re
-from Svc.paidIncreaseSvc import pushPaidIncreaseInfo
+
+
 
 url = "https://opendart.fss.or.kr/api/list.json"
 
@@ -17,17 +18,6 @@ def mainRoutine(corpCodeList: list, date: str, pblntf_ty: str):
         logger.debug(f"{ele['corp_code']}, {date}, {date}, {pblntf_ty}")
         getAnnounceInfo(ele['corp_code'], date, date, pblntf_ty)
         logger.debug("완료")
-
-def eventHandle(dict):
-    corpName = dict['corpName']
-    rceptDt = dict['rceptDt']
-    reportNm = dict['reportNm']
-    corpCode = dict['corpCode']
-    if re.search('.*유상증자.*', reportNm):
-        logger.debug(f'{corpName} {reportNm} {rceptDt} 유상증자 결정')
-        pushPaidIncreaseInfo(dict)
-    if re.search('.*자기주식처분.*', reportNm):
-        logger.debug(f'{corpName} {rceptDt} 자기주식처분 결정')
 
 
 def getAnnounceInfo(corp_code: str, bgn_de: str, end_de: str, pblntf_ty: str):
@@ -57,6 +47,6 @@ def getAnnounceInfo(corp_code: str, bgn_de: str, end_de: str, pblntf_ty: str):
         logger.debug(f"{corpName} {reportNm} {rceptDt}")
         eventCallDict = {"corpName":corpName,"reportNm":reportNm,"rceptDt":rceptDt,"corpCode":corp_code}
         msg.append(eventCallDict)
-        eventHandle(eventCallDict)
+        eventHandle(eventCallDict) #해당하는 이벤트가 있는지 탐색하고 후속 조치 수행
     logger.debug("완료")
     return msg
