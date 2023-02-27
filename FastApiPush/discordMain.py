@@ -2,23 +2,28 @@
 
 import discord
 from declaration import TOKEN
+from discord.ext import commands
 from loguru import logger
-intents = discord.Intents.default()
-intents.message_content = True
+# intents = discord.Intents.default()
+# intents.message_content = True
+#
+# client = discord.Client(intents=
+intents = discord.Intents.default()  # Enable the default intents
+bot = commands.Bot(command_prefix="!",intents=intents)
 
-client = discord.Client(intents=intents)
-
-@client.event
+@bot.event
 async def on_ready():
-    logger.debug(f'We have logged in as {client.user}')
+    logger.debug(f'We have logged in as {bot.user}')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+@bot.command()
+async def on_message(ctx: commands.Context, member: discord.Member):
+    logger.debug(f"logged in as {bot.user} running together with FastApi")
 
-    if message.content.startswith('$hello'):
-        await message.channel.send('Hello!')
+async def runDiscordBot():
+    try:
+        await bot.start(TOKEN)
+    except KeyboardInterrupt:
+        await bot.logout()
 
 async def send_message(msg):
     logger.debug("실행")
