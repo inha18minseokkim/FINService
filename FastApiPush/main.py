@@ -27,8 +27,8 @@ async def testMthd():
             await channel.send("test")
     return "test complete"
 
-@app.get("/sendMessage/{txt}")
-async def sendMessage(txt: str):
+@app.get("/sendDiscordMessage/{txt}")
+async def sendDiscordMessage(txt: str):
     logger.debug("실행")
     for channel in discordMain.bot.get_all_channels():
         if isinstance(channel, discord.TextChannel):
