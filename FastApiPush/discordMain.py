@@ -24,13 +24,3 @@ async def runDiscordBot():
         await bot.start(TOKEN)
     except KeyboardInterrupt:
         await bot.logout()
-
-async def send_message(msg):
-    logger.debug("실행")
-    #await client.wait_until_ready()  # Wait for the client to connect and initialize
-    logger.debug("wait until ready complete")
-    channel = client.get_all_channels()  # Replace channel_id with the ID of your channel
-    logger.debug("channel ready")
-    await channel.send(msg)  # Send a message to the channel
-    logger.debug("완료")
-#client.run(TOKEN)
