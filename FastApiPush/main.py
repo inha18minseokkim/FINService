@@ -16,8 +16,9 @@ async def onStartUp():
     for channel in discordMain.bot.get_all_channels():
         if isinstance(channel, discord.TextChannel):
             await channel.send("FastApi 서버 기동")
-    return
+
     logger.debug("discord Connection 끝")
+    return
 
 @app.get("/test")
 async def testMthd():
