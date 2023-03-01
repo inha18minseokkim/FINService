@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 import sys,os
 
 from sqlalchemy import Table, MetaData, BIGINT, Column, TEXT, UniqueConstraint
+from sqlalchemy.engine import CursorResult
 
 sys.path.append("../DBClient") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from databaseCmn import engineConn
@@ -22,10 +23,10 @@ tbCorpCode = Table('TB_CORP_CODE',metadata,
     )
 tbCorpCode.create(conn.engine,checkfirst=True)
 
+
 @corpCodeRouter.get("/tb_corp_code/")
 async def codeInfoMain():
     return "codeInfo runs successfully"
-
 @corpCodeRouter.get("/tb_corp_code/selectCorpInfoFixed")
 async def selectCorpInfoFixed():
     if not hasattr(selectCorpInfoFixed, "counter"):
@@ -105,6 +106,7 @@ async def insertCorpInfo(body: RequestBody):
 
 @corpCodeRouter.post("/tb_corp_code/updateCorpInfo")
 async def updateCorpInfo(body: RequestBody):
+    session = conn.sessionmaker()
     res = session.query(corpInfo).filter(corpInfo.corp_code == body.corp_code)
     res.update({'corp_name' : body.corp_name})
     res.update( {'stock_code' : body.stock_code})
@@ -115,20 +117,45 @@ async def updateCorpInfo(body: RequestBody):
         logger.debug("수정완료")
     except:
         session.rollback()
+        session.close()
         return {"code" : 1}
+    session.close()
     return {"code" : 0}
 
 @corpCodeRouter.post("/tb_corp_code/insertOrUpdateCorpInfoArr")
 async def insertOrUpdateCorpInfoArr(body: Request): # body안에는 "list" : [{}{}{}] 각각 code에 대한 json 리스트.
+    session = conn.sessionmaker()
     logger.debug(body)
     dict = await body.json()
-    for ele in dict['list']:
-        tmpCorpInfo = corpInfo()
-        tmpCorpInfo.corp_code = ele['corp_code']
-        tmpCorpInfo.corp_name = ele['corp_name']
-        tmpCorpInfo.stock_code = ele['stock_code']
-        tmpCorpInfo.modify_date = ele['modify_date']
-        session.merge(tmpCorpInfo)
-    session.commit()
+    try:
+        for ele in dict['list']:
+            tmpCorpInfo = corpInfo()
+            tmpCorpInfo.corp_code = ele['corp_code']
+            tmpCorpInfo.corp_name = ele['corp_name']
+            tmpCorpInfo.stock_code = ele['stock_code']
+            tmpCorpInfo.modify_date = ele['modify_date']
+            session.merge(tmpCorpInfo)
+        session.commit()
+    except:
+        session.rollback()
+        session.close()
+        return {'code' : 1}
     return {'code' : 0}
 
+@corpCodeRouter.get("/tb_corp_code/getCorpStockCodeByName/{corpName}")
+async def getCorpStockCodeByName(corpName: str):
+    try:
+        exec = conn.engine.connect()
+        stmt = text(
+            f"select corp_code,stock_code from TB_CORP_CODE where corp_name = '{corpName}'")
+        res: CursorResult = exec.execute(stmt)
+    except:
+        return {'code': 1}
+    res = tuple(res.first())
+
+    try:
+        logger.debug(f"튜플 변환 완료 {res[0]} {res[1]}")
+        return {'code' : 0, 'corp_code' : res[0], 'stock_code' : res[1]}
+    except:
+        logger.debug
+        return {'code': 1, 'corp_code': "", 'stock_code': ""}
