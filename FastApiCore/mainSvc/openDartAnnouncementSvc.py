@@ -4,7 +4,7 @@ from declaration import crtfc_key,dbUrl
 import requests
 import json
 from datetime import datetime, timedelta
-from FastApiCore.Svc.eventPushSvcIntf import eventHandle
+from openDartSvc.openDartAnnouncementSelector import eventHandle
 from loguru import logger
 
 
@@ -44,9 +44,11 @@ def getAnnounceInfo(corp_code: str, bgn_de: str, end_de: str, pblntf_ty: str):
         corpName = i['corp_name']
         reportNm = i['report_nm']
         rceptDt = i['rcept_dt']
+        rceptNo = i['rcept_no']
         logger.debug(f"{corpName} {reportNm} {rceptDt}")
-        eventCallDict = {"corpName":corpName,"reportNm":reportNm,"rceptDt":rceptDt,"corpCode":corp_code}
+        eventCallDict = {"corp_name":corpName,"report_nm":reportNm,"rcept_dt":rceptDt,"corp_code":corp_code, "rcept_no":rceptNo}
         msg.append(eventCallDict)
-        eventHandle(eventCallDict) #해당하는 이벤트가 있는지 탐색하고 후속 조치 수행
+        targetObj = eventHandle(eventCallDict) #해당하는 이벤트가 있는지 탐색하고 후속 조치 수행
+        targetObj.pushMessage(eventCallDict)
     logger.debug("완료")
     return msg
