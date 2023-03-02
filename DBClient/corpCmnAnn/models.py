@@ -5,8 +5,8 @@ Base = declarative_base()
 
 class corpCmnAnn(Base):
     __tablename__ = "TB_CORP_CMN_ANN"
-    idx = Column(INT, nullable=False, autoincrement=True, primary_key=True)
-    corp_code = Column(TEXT(length=8), nullable=False)
+    rcept_no = Column(BIGINT, nullable=False, autoincrement=True, primary_key=True,unique=True)
+    corp_code = Column(TEXT, nullable=False)
     corp_name = Column(TEXT, nullable=False)
-    stock_code = Column(TEXT, nullable=False)
-    modify_date = Column(TEXT, nullable=True)
+    report_nm = Column(TEXT, nullable=False)
+    rcept_dt = Column(TEXT, nullable=True)

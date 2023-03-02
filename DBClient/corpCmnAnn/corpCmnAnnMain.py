@@ -17,7 +17,8 @@ conn = engineConn()
 metadata = MetaData()
 tbCorpCmnAnn = Table('TB_CORP_CMN_ANN',metadata,
     Column('rcept_no',BIGINT,nullable=False,unique=True,primary_key=True),
-    Column('corp_code',TEXT(length=8), nullable=False),
+    Column('corp_name',TEXT, nullable=False),
+    Column('corp_code',TEXT, nullable=False),
     Column('report_nm',TEXT, nullable=False),
     Column('rcept_dt',TEXT, nullable=False)
     )
@@ -32,6 +33,7 @@ async def insertCorpCmnAnn(body: Request):
     session = conn.sessionmaker()
     json_str = await body.json()
     try:
+        logger.debug(f"삽입 시도{body}")
         json_str['rcept_no'] = int(json_str['rcept_no'])
         stmt = insert(tbCorpCmnAnn).values(json_str)
         session.execute(stmt)

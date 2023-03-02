@@ -9,6 +9,7 @@ from declaration import dbUrl, sendDiscordMessage
 
 class CmnEventPushSvcIntf:
     def pushMessage(self,msgInfo: dict):
+        logger.debug(msgInfo)
         corpName = msgInfo['corp_name']
         reportNm = msgInfo['report_nm']
         rceptDt = msgInfo['rcept_dt']
@@ -20,6 +21,7 @@ class CmnEventPushSvcIntf:
         logger.debug("메세지 보냄 " + json.dumps(res))
         self.saveDB(msgInfo)
     def saveDB(self,msgInfo: dict):
+        logger.debug(msgInfo)
         res = requests.post(dbUrl + "/tb_corp_cmn_ann/insertCorpCmnAnn",json=msgInfo)
         res = res.json()
         logger.debug(res)
