@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opendart-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opendart
+  template:
+    metadata:
+      labels:
+        app: opendart
+    spec:
+      containers:
+        - name: opendart
+          image: muyaho/fin-service-opendart

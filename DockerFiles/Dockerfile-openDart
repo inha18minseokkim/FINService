@@ -1,0 +1,13 @@
+FROM python:latest
+
+WORKDIR /code
+
+COPY ../OpenDart/requirements.txt ./code/requirements.txt
+
+RUN pip install -r ./code/requirements.txt
+
+COPY ../OpenDart /code
+
+EXPOSE 8082
+
+CMD ["uvicorn","main:app", "--host","0.0.0.0" ,"--port","8082"]

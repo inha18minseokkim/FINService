@@ -32,6 +32,9 @@ async def testMthd():
 async def sendDiscordMessage(txt: str):
     logger.debug("실행")
     for channel in discordMain.bot.get_all_channels():
-        if isinstance(channel, discord.TextChannel):
-            await channel.send(txt)
+        try:
+            if isinstance(channel, discord.TextChannel):
+                await channel.send(txt)
+        except:
+            return {'code' : 1 , "msg" : txt , "errorMsg" : channel.id}
     return {"code" : 0, "msg" : txt}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: opendart-service
+spec:
+  selector:
+    app: opendart
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8082
+      nodePort: 32222
+      targetPort: 8082

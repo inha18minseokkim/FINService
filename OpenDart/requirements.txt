@@ -1,0 +1,13 @@
+fastapi
+asyncio
+nest-asyncio
+rocketry
+SQLAlchemy
+sqlalchemy
+mysql
+pydantic
+uvicorn
+loguru
+pymysql
+requests
+cryptography
