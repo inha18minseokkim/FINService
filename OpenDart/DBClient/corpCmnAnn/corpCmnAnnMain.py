@@ -11,7 +11,7 @@ from .models import corpCmnAnn
 from pydantic import BaseModel
 from loguru import logger
 from sqlalchemy.sql import text
-corpCmnAnnRouter = APIRouter()
+corpCmnAnnRouter = APIRouter(tags=['일반공시'])
 conn = engineConn()
 #session = conn.sessionmaker()
 metadata = MetaData()

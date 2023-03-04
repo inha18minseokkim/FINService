@@ -9,7 +9,7 @@ from loguru import logger
 from sqlalchemy.sql import text
 from sqlalchemy import Column, Table, TEXT, BIGINT, MetaData, insert, cast, String
 
-paidIncreaseRouter = APIRouter()
+paidIncreaseRouter = APIRouter(tags=['주요사항보고서:유상증자결정'])
 conn = engineConn()
 #session = conn.sessionmaker()
 metadata = MetaData()

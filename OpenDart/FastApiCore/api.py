@@ -7,7 +7,7 @@ import sys
 import asyncio
 sys.path.append('../..') #부모 디렉터리 강제로 import 안하면 안됨 왜??????
 sys.path.append("..")
-from .batRes import dailyCBRoutine, dailyCodeRoutine, initCodeRoutine, dailyPaidIncreaseRoutine
+from .batRes import initCodeRoutine
 from .mainSvc import openDartAnnouncementSvc
 from .declaration import dbUrl
 
@@ -26,24 +26,10 @@ def onStartUp():
 async def read_tasks():
     return list(session.tasks)
 
-@coreRouter.get("/passiveRoutine/dailyBWRoutine")
-async def execDailyBWRoutine():
-    return "Not Prepared"
-@coreRouter.get("/passiveRoutine/dailyCBRoutine")
-async def execDailyCBRoutine():
-    asyncio.run(await dailyCBRoutine.getCBEvent())
-    return "Finished"
-@coreRouter.get("/passiveRoutine/dailyCodeRoutine")
-async def execDailyCodeRoutine():
-    asyncio.run(await dailyCodeRoutine.updateCode())
-    return "Finished"
+
 @coreRouter.get("/passiveRoutine/initCodeRoutine")
 async def execInitCodeRoutine():
     await initCodeRoutine.initCode()
-    return "Finished"
-@coreRouter.get("/passiveRoutine/dailyPaidIncreaseRoutine")
-async def execPaidIncreaseRoutine():
-    asyncio.run(await dailyPaidIncreaseRoutine.getPaidIncreaseEvent())
     return "Finished"
 
 @coreRouter.get("/getAnnounceInfo/{corpCode}/{bgnDe}/{endDe}/{pblntfTy}")

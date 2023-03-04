@@ -12,7 +12,7 @@ from .models import corpInfo
 from pydantic import BaseModel
 from loguru import logger
 from sqlalchemy.sql import text
-corpCodeRouter = APIRouter()
+corpCodeRouter = APIRouter(tags=['기업코드정보'])
 conn = engineConn()
 #session = conn.sessionmaker()
 metadata = MetaData()

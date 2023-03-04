@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from loguru import logger
 from sqlalchemy import create_engine, Column, Integer, String, Table, TEXT, INT, BIGINT, MetaData, text, insert
 
-cbRouter = APIRouter()
+cbRouter = APIRouter(tags=['주요사항보고서:전환사채공시'])
 conn = engineConn()
 #session = conn.sessionmaker()
 metadata = MetaData()

@@ -10,7 +10,7 @@ from loguru import logger
 from sqlalchemy.sql import text
 from sqlalchemy import Column, Table, TEXT, BIGINT, MetaData, insert, cast, String
 
-stockDispositionRouter = APIRouter()
+stockDispositionRouter = APIRouter(tags=['주요사항보고서:자기주식처분결정'])
 conn = engineConn()
 #session = conn.sessionmaker()
 metadata = MetaData()
