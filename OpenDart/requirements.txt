@@ -11,3 +11,4 @@ loguru
 pymysql
 requests
 cryptography
+redis
