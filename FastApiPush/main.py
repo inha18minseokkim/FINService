@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from loguru import logger
 import discord
 import nest_asyncio
+from pydantic import BaseModel
+
 import discordMain
 from declaration import TOKEN
 app = FastAPI()
@@ -38,3 +40,29 @@ async def sendDiscordMessage(txt: str):
         except:
             return {'code' : 1 , "msg" : txt , "errorMsg" : channel.id}
     return {"code" : 0, "msg" : txt}
+
+class item(BaseModel):
+    txt: str
+@app.post("/sendDiscordMessage/")
+async def sendDiscordMessage(items: item):
+    txt = items.txt
+    logger.debug("실행")
+    for channel in discordMain.bot.get_all_channels():
+        try:
+            if isinstance(channel, discord.TextChannel):
+                logger.debug("메세지 보내기 시작" + txt)
+                await channel.send(txt)
+        except:
+            return {'code': 1, "msg": txt, "errorMsg": channel.id}
+    return {"code": 0, "msg": txt}
+
+@app.get("/getStatus")
+async def getStatus():
+    return f"{discordMain.bot.status}"
+@app.get("/testSend")
+async def testSend():
+    intents = discord.Intents.default()
+    intents.members = True
+    client = discord.Client(intents=intents)
+    channel = client.get_channel(893461516383297600)
+    await channel.send("testSend")

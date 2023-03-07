@@ -20,7 +20,11 @@ async def on_message(ctx: commands.Context, member: discord.Member):
     logger.debug(f"logged in as {bot.user} running together with FastApi")
 
 async def runDiscordBot():
+    logger.debug("discordbot 시작")
     try:
+        logger.debug("시작중")
         await bot.start(TOKEN)
+        logger.debug(bot.get_all_channels().send("start"))
+        logger.debug("시작완료")
     except KeyboardInterrupt:
         await bot.logout()
