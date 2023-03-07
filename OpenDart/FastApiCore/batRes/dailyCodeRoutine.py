@@ -3,7 +3,6 @@ import sys,os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 from declaration import crtfc_key,dbUrl
 import requests
-import asyncio
 import zipfile
 import urllib
 import xml.etree.ElementTree as elemTree
