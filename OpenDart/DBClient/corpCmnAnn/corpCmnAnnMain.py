@@ -32,7 +32,7 @@ def insertCorpCmnAnn(json_str: dict):
     session = conn.sessionmaker()
     #json_str = await body.json()
     try:
-        logger.debug(f"삽입 시도{body}")
+        logger.debug(f"삽입 시도{json_str}")
         json_str['rcept_no'] = int(json_str['rcept_no'])
         stmt = insert(tbCorpCmnAnn).values(json_str)
         session.execute(stmt)

@@ -3,7 +3,7 @@ import sys,os
 sys.path.append("../..") #상위 경로를 현재 경로에 넣어 declaration 파일 임포트 가능
 sys.path.append("..")
 from FastApiCore.declaration import crtfc_key, dbUrl, sendDiscordMessage
-from openDartSvc.eventPushSvcIntf import CmnEventPushSvcIntf
+from .eventPushSvcIntf import CmnEventPushSvcIntf
 from DBClient import stockDisposition
 '''
 사용 파라미터 : 회사코드, 날짜

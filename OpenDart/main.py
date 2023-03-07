@@ -6,6 +6,7 @@ from DBClient.paidIncrease.paidIncreaseMain import paidIncreaseRouter
 from DBClient.stockDisposition.stockDispositionMain import stockDispositionRouter
 from DBClient.corpCmnAnn.corpCmnAnnMain import corpCmnAnnRouter
 from FastApiCore.api import coreRouter
+from messageReceiver import redisRouter
 app = FastAPI()
 conn = engineConn()
 session = conn.sessionmaker()
@@ -17,6 +18,7 @@ app.include_router(stockDispositionRouter)
 app.include_router(corpCmnAnnRouter)
 app.include_router(coreRouter)
 app.include_router(coreRouter)
+app.include_router(redisRouter)
 #meta_data = MetaData(bind=conn,reflect=True)
 #finServiceTable = meta_data.tables['TB_CORP_CODE']
 

@@ -1,7 +1,6 @@
 from fastapi import FastAPI, APIRouter
 import requests
 
-from .scheduler import app as app_rocketry
 from loguru import logger
 import sys
 import asyncio
@@ -12,7 +11,7 @@ from .mainSvc import openDartAnnouncementSvc
 from .declaration import dbUrl
 
 coreRouter = APIRouter()
-session = app_rocketry.session
+
 #배치 조회용 fastapi서버. 온라인은 다른곳에 기술하자.
 @coreRouter.get("/")
 def helloWorld():
@@ -21,18 +20,14 @@ def helloWorld():
 @coreRouter.on_event("startup")
 def onStartUp():
     logger.debug("start")
-    
-@coreRouter.get("/tasks")
-async def read_tasks():
-    return list(session.tasks)
 
 
-@coreRouter.get("/passiveRoutine/initCodeRoutine")
+@coreRouter.get("/passiveRoutine/initCodeRoutine", tags=["needs to be scheduled"])
 async def execInitCodeRoutine():
     await initCodeRoutine.initCode()
     return "Finished"
 
-@coreRouter.get("/getAnnounceInfo/{corpCode}/{bgnDe}/{endDe}/{pblntfTy}")
+@coreRouter.get("/getAnnounceInfo/{corpCode}/{bgnDe}/{endDe}/{pblntfTy}",tags=["needs to be scheduled"])
 async def getAnnounceInfo(corpCode: str,bgnDe: str,endDe: str, pblntfTy: str):
     logger.debug(f"{corpCode} {bgnDe} {endDe} {pblntfTy}")
     res = openDartAnnouncementSvc.getAnnounceInfo(corpCode, bgnDe, endDe, pblntfTy)
