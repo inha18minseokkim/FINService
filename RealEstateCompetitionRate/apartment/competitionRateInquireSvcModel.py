@@ -5,8 +5,8 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class TB_SUBSCRIPTION_INFO_INQUIRE(Base):
-    __tablename__ = "TB_SUBSCRIPTION_INFO_INQUIRE"
+class TB_APT_COMPETITION_RATE(Base):
+    __tablename__ = "TB_APT_COMPETITION_RATE"
     HOUSE_MANAGE_NO = Column(Integer, nullable=False, autoincrement=True, primary_key=True)
     PBLANC_NO = Column(TEXT, nullable=False)
     HOUSE_NM = Column(TEXT, nullable=True)
