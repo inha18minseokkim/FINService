@@ -59,10 +59,3 @@ async def sendDiscordMessage(items: item):
 @app.get("/getStatus")
 async def getStatus():
     return f"{discordMain.bot.status}"
-@app.get("/testSend")
-async def testSend():
-    intents = discord.Intents.default()
-    intents.members = True
-    client = discord.Client(intents=intents)
-    channel = client.get_channel(893461516383297600)
-    await channel.send("testSend")
