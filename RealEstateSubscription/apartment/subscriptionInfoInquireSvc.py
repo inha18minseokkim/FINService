@@ -1,11 +1,12 @@
 import sys
 sys.path.append("..")
+from apartment.subscriptionInfoInquireDB import saveDB,createTable
 from loguru import logger
 from declaration import dataPortalKey, sendDiscordMessage
 from subscriptionInfoInquireSvcModel import TB_SUBSCRIPTION_INFO_INQUIRE, infoDict
 import requests
 #한국부동산원 청약홈 분양정보 조회 서비스
-requestUrl = "http://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1/getUrbtyOfctlLttotPblancDetail"
+requestUrl = "http://api.odcloud.kr/api/ApplyhomeInfoDetailSvc/v1/getAPTLttotPblancDetail"
 def executeApi(pageNum: int,startDate: str, endDate: str)-> list: #curDate는 YYYY-MM-dd 형식
     logger.debug(dataPortalKey)
     header = {"Authorization" : f"Infuser {dataPortalKey}"}
@@ -27,12 +28,15 @@ def executeApi(pageNum: int,startDate: str, endDate: str)-> list: #curDate는 YY
     #print(reslist)
     return reslist
 
-def executeMsg(subscriptionInfoInquireList: list):
-    for ele in subscriptionInfoInquireList:
-        tmpMsg = ele.getMsg()
-        logger.debug(tmpMsg)
-        sendDiscordMessage(tmpMsg)
-if __name__ == "__main__":
-    tmp = executeApi(5,"2023-01-01","2023-03-07")
-    executeMsg(tmp)
+def executeMsg(tb: TB_SUBSCRIPTION_INFO_INQUIRE):
+    tmpMsg = tb.getMsg()
+    logger.debug(tmpMsg)
+    sendDiscordMessage(tmpMsg)
 
+
+if __name__ == "__main__":
+    tmplist = executeApi(5000,"2022-09-01","2023-03-08")
+    createTable()
+    for ele in tmplist:
+        executeMsg(ele)
+        saveDB(ele)
