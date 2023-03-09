@@ -1,15 +1,16 @@
 import sys
-
 from loguru import logger
+sys.path.append("../..")
+sys.path.append("c:\\users\\bjm77\\anaconda3\\lib\\site-packages")
+from common.dbModel import subscriptionInfo
 
-from .subscriptionInfoInquireSvcModel import TB_APT_SUBSCRIPTION_INFO_INQUIRE
 
-sys.path.append("..")
 from databaseCmn import engineConn
-from docutils.nodes import tbody
-from sqlalchemy import create_engine, Column, Integer, String, Table, TEXT, INT, BIGINT, MetaData, text, insert
+from sqlalchemy import Column, Integer, Table, TEXT, MetaData, and_
+
+
 metadata = MetaData()
-tbSubscriptionInfoInquire = Table("TB_APT_SUBSCRIPTION_INFO_INQUIRE",metadata,
+tbSubscriptionInfoInquire = Table("TB_SUBSCRIPTION_INFO_INQUIRE",metadata,
 Column('HOUSE_MANAGE_NO',Integer, nullable=False, autoincrement=True, primary_key=True),
 Column('PBLANC_NO',TEXT, nullable=False),
 Column('HOUSE_NM',TEXT, nullable=True),
@@ -50,14 +51,29 @@ Column('IMPRMN_BSNS_AT',TEXT, nullable=True),
 Column('PUBLIC_HOUSE_EARTH_AT',TEXT, nullable=True),
 Column('LRSCL_BLDLND_AT',TEXT, nullable=True),
 Column('NPLN_PRVOPR_PUBLIC_HOUSE_AT',TEXT, nullable=True),
-Column('PBLANC_URL',TEXT, nullable=True))
-
+Column('PBLANC_URL',TEXT, nullable=True),
+Column('SEARCH_HOUSE_SECD',TEXT, nullable=True),
+Column('GNRL_RCEPT_BGNDE',TEXT, nullable=True),
+Column('GNRL_RCEPT_ENDDE',TEXT, nullable=True))
 
 conn = engineConn()
+
 def createTable():
     tbSubscriptionInfoInquire.create(conn.engine,checkfirst=True)
 
-def saveDB(tb: TB_APT_SUBSCRIPTION_INFO_INQUIRE):
+def selectDataByDate(startDate: str,endDate: str)->list[subscriptionInfo]:
+    session = conn.sessionmaker()
+    res = session.query(subscriptionInfo).filter(and_(subscriptionInfo.RCEPT_BGNDE >= startDate ,subscriptionInfo.RCEPT_BGNDE <= endDate)).all()
+
+    session.close()
+    return res
+def selectDataByHouseManageNm(houseManageNm: str) -> subscriptionInfo:
+    session = conn.sessionmaker()
+    res = session.query(subscriptionInfo).filter(subscriptionInfo.HOUSE_MANAGE_NO == houseManageNm).first()
+    session.close()
+    return res
+
+def saveDB(tb: subscriptionInfo):
     session = conn.sessionmaker()
     try:
         session.add(tb)
@@ -70,3 +86,12 @@ def saveDB(tb: TB_APT_SUBSCRIPTION_INFO_INQUIRE):
     logger.debug("삽입완료")
 
     return {'code': 0}
+
+if __name__ == "__main__":
+    createTable()
+    # tmp = selectDataByDate("2023-01-01","2023-03-09")
+    # for i in tmp:
+    #     logger.debug(i.to_dict())
+    #
+    tmp = selectDataByHouseManageNm("2023000008")
+    logger.debug(tmp.to_dict())

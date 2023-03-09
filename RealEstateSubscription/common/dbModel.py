@@ -1,12 +1,14 @@
 from loguru import logger
+import sys
+sys.path.append("c:\\users\\bjm77\\anaconda3\\lib\\site-packages")
 from sqlalchemy import Column, TEXT, INT, BIGINT, UniqueConstraint, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 
-class TB_APT_SUBSCRIPTION_INFO_INQUIRE(Base):
-    __tablename__ = "TB_APT_SUBSCRIPTION_INFO_INQUIRE"
+class subscriptionInfo(Base):
+    __tablename__ = "TB_SUBSCRIPTION_INFO_INQUIRE"
     HOUSE_MANAGE_NO = Column(Integer, nullable=False, autoincrement=True, primary_key=True)
     PBLANC_NO = Column(TEXT, nullable=False)
     HOUSE_NM = Column(TEXT, nullable=True)
@@ -48,6 +50,9 @@ class TB_APT_SUBSCRIPTION_INFO_INQUIRE(Base):
     LRSCL_BLDLND_AT = Column(TEXT, nullable=True)
     NPLN_PRVOPR_PUBLIC_HOUSE_AT = Column(TEXT, nullable=True)
     PBLANC_URL = Column(TEXT, nullable=True)
+    SEARCH_HOUSE_SECD = Column(TEXT, nullable=True)
+    GNRL_RCEPT_BGNDE = Column(TEXT, nullable=True)
+    GNRL_RCEPT_ENDDE = Column(TEXT, nullable=True)
     def __init__(self, jsonData):
         self.HOUSE_MANAGE_NO = jsonData.get('HOUSE_MANAGE_NO')
         self.PBLANC_NO = jsonData.get('PBLANC_NO')
@@ -90,6 +95,9 @@ class TB_APT_SUBSCRIPTION_INFO_INQUIRE(Base):
         self.LRSCL_BLDLND_AT = jsonData.get('LRSCL_BLDLND_AT')
         self.NPLN_PRVOPR_PUBLIC_HOUSE_AT = jsonData.get('NPLN_PRVOPR_PUBLIC_HOUSE_AT')
         self.PBLANC_URL = jsonData.get('PBLANC_URL')
+        self.SEARCH_HOUSE_SECD = jsonData.get('SEARCH_HOUSE_SECD')
+        self.GNRL_RCEPT_BGNDE = jsonData.get('GNRL_RCEPT_BGNDE')
+        self.GNRL_RCEPT_ENDDE = jsonData.get('GNRL_RCEPT_ENDDE')
     def to_dict(self):
         return {
             'HOUSE_MANAGE_NO' : self.HOUSE_MANAGE_NO,
@@ -132,7 +140,10 @@ class TB_APT_SUBSCRIPTION_INFO_INQUIRE(Base):
         'PUBLIC_HOUSE_EARTH_AT' : self.PUBLIC_HOUSE_EARTH_AT,
         'LRSCL_BLDLND_AT' : self.LRSCL_BLDLND_AT,
         'NPLN_PRVOPR_PUBLIC_HOUSE_AT' : self.NPLN_PRVOPR_PUBLIC_HOUSE_AT,
-        'PBLANC_URL' : self.PBLANC_URL
+        'PBLANC_URL' : self.PBLANC_URL,
+            'SEARCH_HOUSE_SECD': self.SEARCH_HOUSE_SECD,
+            'GNRL_RCEPT_BGNDE': self.GNRL_RCEPT_BGNDE,
+            'GNRL_RCEPT_ENDDE': self.GNRL_RCEPT_ENDDE
         }
     def getMsg(self):
         curdict = self.to_dict()
@@ -225,5 +236,9 @@ infoDict = {
 
 'NPLN_PRVOPR_PUBLIC_HOUSE_AT' : '수도권내민영공공주택지구',
 
-'PBLANC_URL' : '모집공고URL'
+'PBLANC_URL' : '모집공고URL',
+
+'SEARCH_HOUSE_SECD' : '주택구분 (0201:도시형생활주택, 0202:오피스텔, 0203:민간임대, 0303:공공지원민간임대)',
+'GNRL_RCEPT_BGNDE' : '일반공급접수 시작일',
+'GNRL_RCEPT_ENDDE' : '일반공급접수 종료일',
 }
