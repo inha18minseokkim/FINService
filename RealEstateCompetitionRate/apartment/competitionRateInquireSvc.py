@@ -1,18 +1,17 @@
 import sys
 sys.path.append("..")
-from apartment.competitionRateInquireDB import saveDB,createTable
+#from apartment.competitionRateInquireDB import saveDB,createTable
 from loguru import logger
 from declaration import dataPortalKey, sendDiscordMessage
-from subscriptionInfoInquireSvcModel import TB_SUBSCRIPTION_INFO_INQUIRE, infoDict
+
 import requests
 #아파트 분양정보/경쟁률 조회
 requestUrl = "http://api.odcloud.kr/api/ApplyhomeInfoCmpetRtSvc/v1/getAPTLttotPblancCmpet"
-def executeApi(pageNum: int,startDate: str, endDate: str)-> list: #curDate는 YYYY-MM-dd 형식
+def executeApi(houseManageNo: str,pageNum : int)-> list: #curDate는 YYYY-MM-dd 형식
     logger.debug(dataPortalKey)
     header = {"Authorization" : f"Infuser {dataPortalKey}"}
     param = {"page" : "1", "perPage" : pageNum, "returnType" : "JSON" ,
-             "cond[RCRIT_PBLANC_DE::GTE]" : startDate,
-             "cond[RCRIT_PBLANC_DE::LTE]" : endDate
+             "cond[HOUSE_MANAGE_NO::EQ]" : houseManageNo
              }
     res = requests.get(url=requestUrl,params=param,headers=header)
     logger.debug(res.json())
@@ -23,20 +22,22 @@ def executeApi(pageNum: int,startDate: str, endDate: str)-> list: #curDate는 YY
     #logger.debug(res)
     reslist = []
     for ele in res['data']:
-        reslist.append(TB_SUBSCRIPTION_INFO_INQUIRE(ele))
+        #reslist.append(TB_SUBSCRIPTION_INFO_INQUIRE(ele))
+        reslist.append(ele)
         #logger.debug(reslist[-1].to_dict())
     #print(reslist)
     return reslist
 
-def executeMsg(tb: TB_SUBSCRIPTION_INFO_INQUIRE):
-    tmpMsg = tb.getMsg()
-    logger.debug(tmpMsg)
-    sendDiscordMessage(tmpMsg)
+# def executeMsg(tb):
+#     tmpMsg = tb.getMsg()
+#     logger.debug(tmpMsg)
+#     sendDiscordMessage(tmpMsg)
 
 
 if __name__ == "__main__":
-    tmplist = executeApi(1000,"2023-01-01","2023-03-08")
-    createTable()
-    for ele in tmplist:
-        executeMsg(ele)
-        saveDB(ele)
+    tmplist = executeApi(2022000261,10)
+    logger.debug(tmplist)
+    #createTable()
+    #for ele in tmplist:
+    #    executeMsg(ele)
+    #    saveDB(ele)
