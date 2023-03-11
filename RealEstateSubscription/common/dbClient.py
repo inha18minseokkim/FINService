@@ -1,7 +1,7 @@
 import sys
 from loguru import logger
 sys.path.append("../..")
-sys.path.append("c:\\users\\bjm77\\anaconda3\\lib\\site-packages")
+
 from common.dbModel import subscriptionInfo
 
 

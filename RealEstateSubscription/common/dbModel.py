@@ -1,6 +1,6 @@
 from loguru import logger
 import sys
-sys.path.append("c:\\users\\bjm77\\anaconda3\\lib\\site-packages")
+
 from sqlalchemy import Column, TEXT, INT, BIGINT, UniqueConstraint, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
