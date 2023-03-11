@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from apartment.api import apartmentRouter
 from studio.api import studioRouter
+from residual.api import residRouter
 from common.dbClient import selectDataByHouseManageNm, selectDataByDate
 from declaration import sendDiscordMessage
 
 app = FastAPI()
 app.include_router(apartmentRouter)
 app.include_router(studioRouter)
+app.include_router(residRouter)
 
 @app.get("/")
 async def test():
