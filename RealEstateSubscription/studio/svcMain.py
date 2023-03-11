@@ -1,5 +1,5 @@
 import sys
-sys.path.append("..")
+sys.path.append("../..")
 from loguru import logger
 from declaration import dataPortalKey, sendDiscordMessage
 from common.dbModel import subscriptionInfo

@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 import sys
 sys.path.append("..")
-from RealEstateSubscription.common.dbModel import subscriptionInfo
-from RealEstateSubscription.declaration import sendDiscordMessage
-from RealEstateSubscription.common.dbClient import selectDataByDate, saveDB, selectDataByHouseManageNm
+from common.dbModel import subscriptionInfo
+from declaration import sendDiscordMessage
+from common.dbClient import selectDataByDate, saveDB, selectDataByHouseManageNm
 from .svcMain import executeApi
 
 studioRouter = APIRouter(tags=["오피스텔/도시형/민간임대"])
