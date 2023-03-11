@@ -64,9 +64,9 @@ def createTable():
 def selectDataByDate(startDate: str,endDate: str)->list[subscriptionInfo]:
     session = conn.sessionmaker()
     res = session.query(subscriptionInfo).filter(and_(subscriptionInfo.RCEPT_BGNDE >= startDate ,subscriptionInfo.RCEPT_BGNDE <= endDate)).all()
-
     session.close()
     return res
+
 def selectDataByHouseManageNm(houseManageNm: str) -> subscriptionInfo:
     session = conn.sessionmaker()
     res = session.query(subscriptionInfo).filter(subscriptionInfo.HOUSE_MANAGE_NO == houseManageNm).first()

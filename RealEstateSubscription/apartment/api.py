@@ -16,3 +16,4 @@ async def dailyGetApartmentData(pageNum: int, startDt: str,endDt : str = ""):
     for i in resli:
         saveDB(i)
     return {'code' : 0, 'startDt' : startDt, 'endDt': endDt}
+
