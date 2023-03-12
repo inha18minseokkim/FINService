@@ -2,6 +2,7 @@ import sys
 sys.path.append("..")
 #from apartment.competitionRateInquireDB import saveDB,createTable
 from loguru import logger
+from .dbModel import aptCompetitionRate
 from declaration import dataPortalKey, sendDiscordMessage
 
 import requests
@@ -22,10 +23,7 @@ def executeApi(houseManageNo: str,pageNum : int)-> list: #curDate는 YYYY-MM-dd 
     #logger.debug(res)
     reslist = []
     for ele in res['data']:
-        #reslist.append(TB_SUBSCRIPTION_INFO_INQUIRE(ele))
-        reslist.append(ele)
-        #logger.debug(reslist[-1].to_dict())
-    #print(reslist)
+        reslist.append(aptCompetitionRate(ele))
     return reslist
 
 # def executeMsg(tb):

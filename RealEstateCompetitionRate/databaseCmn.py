@@ -1,5 +1,6 @@
 import json
-
+import sys
+sys.path.append("c:\\users\\bjm77\\anaconda3\\lib\\site-packages")
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker, DeclarativeMeta
 import declaration

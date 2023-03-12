@@ -1,19 +1,19 @@
 from loguru import logger
-from sqlalchemy import Column, TEXT, INT, BIGINT, UniqueConstraint, Integer
+from sqlalchemy import Column, TEXT, INT, BIGINT, UniqueConstraint, Integer, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 
-class TB_APT_COMPETITION_RATE(Base):
+class aptCompetitionRate(Base):
     __tablename__ = "TB_APT_COMPETITION_RATE"
     HOUSE_MANAGE_NO = Column(INT, autoincrement=True, primary_key=True)
-    PBLANC_NO = Column(INT, nullable=True)
-    MODEL_NO = Column(TEXT, nullable=True)
-    HOUSE_TY = Column(TEXT, nullable=True)
-    SUPLY_HSHLDCO = Column(INT, nullable=True)
-    SUBSCRPT_RANK_CODE = Column(INT, nullable=True)
-    RESIDE_SECD = Column(TEXT, nullable=True)
+    PBLANC_NO = Column(Integer, nullable=True)
+    MODEL_NO = Column(VARCHAR(5), nullable=False,primary_key=True)
+    HOUSE_TY = Column(VARCHAR(15), nullable=False,primary_key=True)
+    SUPLY_HSHLDCO = Column(VARCHAR(5), nullable=True)
+    SUBSCRPT_RANK_CODE = Column(VARCHAR(5), nullable=False,primary_key=True)
+    RESIDE_SECD = Column(VARCHAR(5), nullable=False,primary_key=True)
     RESIDE_SENM = Column(TEXT, nullable=True)
     REQ_CNT = Column(TEXT, nullable=True)
     CMPET_RATE = Column(TEXT, nullable=True)
