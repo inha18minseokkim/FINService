@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realestate-subscriptioninfo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: realestate
+  template:
+    metadata:
+      labels:
+        app: realestate
+    spec:
+      containers:
+        - name: subscription-info
+          image: muyaho/fin-service-realestatesubscriptioninfo
