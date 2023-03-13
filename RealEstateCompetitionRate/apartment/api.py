@@ -7,7 +7,7 @@ apartmentRouter = APIRouter(tags=["아파트"])
 
 @apartmentRouter.get("/dailyApartmentData")
 async def dailyApartmentData(startDate: str, endDate: str):
-    rqstUrl = f"http://realestate-service.default.svc.cluster.local:8083/getHouseManageNmByDay?startDate={startDate}&endDate={endDate}"
+    rqstUrl = f"http://realestate-service.default.svc.cluster.local:8085/getHouseManageNmByDay?startDate={startDate}&endDate={endDate}"
     res = requests.get(rqstUrl)
     if res.status_code != 200:
         return {'code' : 1}
