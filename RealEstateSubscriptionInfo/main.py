@@ -12,7 +12,7 @@ app.include_router(residRouter)
 
 @app.get("/")
 async def test():
-    return "RealEstateSubscription 정상 작동중"
+    return "RealEstateSubscriptionInfo 정상 작동중"
 
 @app.get("/getSubscriptionInfoByDay")
 async def getSubscriptionInfoByDay(startDate: str, endDate: str):
