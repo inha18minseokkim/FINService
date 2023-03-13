@@ -9,7 +9,7 @@ import requests
 #아파트 분양정보/경쟁률 조회
 requestUrl = "http://api.odcloud.kr/api/ApplyhomeInfoCmpetRtSvc/v1/getAPTLttotPblancCmpet"
 def executeApi(houseManageNo: str,pageNum : int)-> list: #curDate는 YYYY-MM-dd 형식
-    logger.debug(dataPortalKey)
+    logger.debug(f"{houseManageNo} 에 따른 데이터 추출 시작")
     header = {"Authorization" : f"Infuser {dataPortalKey}"}
     param = {"page" : "1", "perPage" : pageNum, "returnType" : "JSON" ,
              "cond[HOUSE_MANAGE_NO::EQ]" : houseManageNo
