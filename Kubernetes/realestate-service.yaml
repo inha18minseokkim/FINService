@@ -12,6 +12,8 @@ spec:
       nodePort: 32221
       targetPort: 8085
       name: subscriptioninfoport
+
+
     - protocol: TCP
       port: 8086
       nodePort: 32220
