@@ -33,3 +33,4 @@ public class RealEstateDailyExecutor implements Job {
     }
 }
 
+public class
